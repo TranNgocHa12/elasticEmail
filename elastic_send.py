@@ -1,6 +1,19 @@
 import os
 import requests
 
+
+def get_unsent_email():
+	headers = {'Content-Type': "application/json", 'Accept': "application/json"}
+	# check_api = "http://68.183.189.171:9999/unsentEmail"
+  check_api = "http://127.0.0.1:5049/unsentEmail"
+	data = requests.get(check_api,headers=headers)
+	if data.status_code != 200:
+		print(data.status_code)
+		print(data.reason)
+	else:
+		json_object = data.json()
+		return json_object
+
 def send_transactional_email(
     to_email: str, 
     subject: str, 
@@ -67,6 +80,8 @@ def send_transactional_email(
 # --- Example Usage ---
 if __name__ == "__main__":
     # Ensure your API key is exported: export ELASTIC_EMAIL_API_KEY="your-key-here"
+    email_list = get_unsent_email
+    print(email_list)
     send_transactional_email(
         to_email=["hatrankid@gmail.com","tran.habk0605@gmail.com","thuydt@fitech.com.vn"],
         subject="Welcome to Our App!",
