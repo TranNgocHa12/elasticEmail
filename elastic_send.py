@@ -134,7 +134,8 @@ def send_email():
 	email_str = ""
 	for item in email_list:
 		email_str +=  "\"" + item["email"] + "\"" + ","
-	emails = email_str[:-1]
+	email_str += "\"" + "support@fitech.com.vn" + "\""
+	# emails = email_str[:-1]
 	send_status = -1
 	if(email_str != ""):
 		send_status = send_transactional_email(
