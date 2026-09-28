@@ -139,7 +139,7 @@ def send_email():
 	send_status = -1
 	if(email_str != ""):
 		send_status = send_transactional_email(
-		to_email = emails,
+		to_email = email_str,
 	    # to_email=["hatrankid@gmail.com","tran.habk0605@gmail.com","thuydt@fitech.com.vn"],
 	    subject=email_templ[0]["subject"],
 	    html_body=email_templ[0]["body_html"],
