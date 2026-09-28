@@ -91,12 +91,12 @@ def send_transactional_email(
 		"ContentType": "HTML",
 		"Content": html_body
 	  },
-	  {
-		"ContentType": "PlainText",
-		"Content": "Hello,\n\nYour verification code for Fitech is 129056. This code will expire in 10 minutes.\n\nBest regards,\nFitech Team"
-	  }
+	#   {
+	# 	"ContentType": "PlainText",
+	# 	"Content": "Hello,\n\nYour verification code for Fitech is 129056. This code will expire in 10 minutes.\n\nBest regards,\nFitech Team"
+	#   }
 	],
-	"Subject": "Your Fitech Account Verification Code",
+	"Subject": subject,
 	"From": from_email
   }
 }
@@ -132,52 +132,49 @@ def send_email():
 	email_templ = get_email_template(email_name)
 	email_list = get_unsent_email(email_batch_size)
 	email_str = ""
-	for item in email_list:
-		email_str +=  "\"" + item["email"] + "\"" + ","
-	email_str += "\"" + "support@fitech.com.vn" + "\""
-	# emails = email_str[:-1]
 	send_status = -1
-	if(email_str != ""):
+	for item in email_list:
+			# if(email_str != ""):
 		send_status = send_transactional_email(
-		to_email = email_str,
-	    # to_email=["hatrankid@gmail.com","tran.habk0605@gmail.com","thuydt@fitech.com.vn"],
+		to_email = item["email"],
 	    subject=email_templ[0]["subject"],
 	    html_body=email_templ[0]["body_html"],
 	    from_email="hatn@fitech.com.vn"
 	)
-	if(send_status != -1):
-		for item in email_list:
+		if(send_status != -1):
 			update_sent_email(item["id"])
+	send_status = send_transactional_email(
+		to_email = "support@fitech.com.vn",
+	    subject=email_templ[0]["subject"],
+	    html_body=email_templ[0]["body_html"],
+	    from_email="hatn@fitech.com.vn"
+	)
 	logging.info("Send email successfully!")
+		# email_str +=  "\"" + item["email"] + "\"" + ","
+	# email_str += "\"" + "support@fitech.com.vn" + "\""
+	# emails = email_str[:-1]
+	
+	# if(email_str != ""):
+	# 	send_status = send_transactional_email(
+	# 	to_email = email_str,
+	#     subject=email_templ[0]["subject"],
+	#     html_body=email_templ[0]["body_html"],
+	#     from_email="hatn@fitech.com.vn"
+	# )
+	# if(send_status != -1):
+	# 	for item in email_list:
+	# 		update_sent_email(item["id"])
+	# logging.info("Send email successfully!")
 
 # --- Example Usage ---
 if __name__ == "__main__":
 	scheduler = BlockingScheduler()
 
 	# Option A: Run at 3 specific times of day (e.g., 8:00 AM, 1:00 PM, 6:00 PM)
-	scheduler.add_job(send_email, 'cron', hour='2,10,18', minute=0)
+	# scheduler.add_job(send_email, 'cron', hour='2,10,18', minute=0)
 	scheduler.add_job(send_email, 'cron', hour=hour_send_email, minute=minute_send_email)
 	
 
 	# Option B: Run every 8 hours interval
 	# scheduler.add_job(send_email, 'interval', hours=8)
 	scheduler.start()
-	# # Ensure your API key is exported: export ELASTIC_EMAIL_API_KEY="your-key-here"
-	# print("Starting to send email")
-	# email_list = get_unsent_email(email_batch_size)
-	# email_str = ""
-	# for item in email_list:
-	# 	email_str +=  "\"" + item["email"] + "\"" + ","
-	# emails = email_str[:-1]
-	# send_status = -1
-	# if(email_str != ""):
-	# 	send_status = send_transactional_email(
-	# 	to_email = emails,
-	#     # to_email=["hatrankid@gmail.com","tran.habk0605@gmail.com","thuydt@fitech.com.vn"],
-	#     subject="Welcome to Our App!",
-	#     html_body="<p>Hello,</p><p>Your verification code for Fitech is <strong>129056</strong>. This code will expire in 10 minutes.</p><p>Best regards,<br>Fitech Team</p>",
-	#     from_email="hatn@fitech.com.vn"
-	# )
-	# if(send_status != -1):
-	# 	for item in email_list:
-	# 		update_sent_email(item["id"])
