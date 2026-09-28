@@ -20,12 +20,27 @@ ELASTIC_API_KEY = os.getenv("ELASTIC_API_KEY")
 email_batch_size = os.getenv("email_batch_size")
 hour_send_email = os.getenv("hour_send_email")
 minute_send_email = os.getenv("minute_send_email")
+email_name = os.getenv("email_name")
 
 def get_unsent_email(email_batch_size):
 		headers = {'Content-Type': "application/json", 'Accept': "application/json"}
 		check_api = "http://68.183.189.171:9999/unsentEmail"
 		# check_api = "http://127.0.0.1:5049/unsentEmail"
 		jsondata = {"name":email_batch_size}
+		data = requests.get(check_api,json=jsondata,headers=headers)
+		if data.status_code != 200:
+			print(data.status_code)
+			print(data.reason)
+		else:
+			print("OK")
+			json_object = data.json()
+			return json_object
+
+def get_email_template(email_name):
+		headers = {'Content-Type': "application/json", 'Accept': "application/json"}
+		check_api = "http://68.183.189.171:9999/getEmailTemplate"
+		# check_api = "http://127.0.0.1:5049/unsentEmail"
+		jsondata = {"name":email_name}
 		data = requests.get(check_api,json=jsondata,headers=headers)
 		if data.status_code != 200:
 			print(data.status_code)
@@ -114,6 +129,7 @@ def send_transactional_email(
 
 def send_email():
 	logging.info("Start to sent email")
+	email_templ = get_email_template(email_name)
 	email_list = get_unsent_email(email_batch_size)
 	email_str = ""
 	for item in email_list:
@@ -124,8 +140,8 @@ def send_email():
 		send_status = send_transactional_email(
 		to_email = emails,
 	    # to_email=["hatrankid@gmail.com","tran.habk0605@gmail.com","thuydt@fitech.com.vn"],
-	    subject="Welcome to Our App!",
-	    html_body="<p>Hello,</p><p>Your verification code for Fitech is <strong>129056</strong>. This code will expire in 10 minutes.</p><p>Best regards,<br>Fitech Team</p>",
+	    subject=email_templ[0]["subject"],
+	    html_body=email_templ[0]["body_html"],
 	    from_email="hatn@fitech.com.vn"
 	)
 	if(send_status != -1):
