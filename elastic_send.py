@@ -23,8 +23,8 @@ minute_send_email = os.getenv("minute_send_email")
 
 def get_unsent_email(email_batch_size):
 		headers = {'Content-Type': "application/json", 'Accept': "application/json"}
-		# check_api = "http://68.183.189.171:9999/unsentEmail"
-		check_api = "http://127.0.0.1:5049/unsentEmail"
+		check_api = "http://68.183.189.171:9999/unsentEmail"
+		# check_api = "http://127.0.0.1:5049/unsentEmail"
 		jsondata = {"name":email_batch_size}
 		data = requests.get(check_api,json=jsondata,headers=headers)
 		if data.status_code != 200:
@@ -37,8 +37,8 @@ def get_unsent_email(email_batch_size):
 
 def update_sent_email(email_id):
 		headers = {'Content-Type': "application/json", 'Accept': "application/json"}
-		# check_api = "http://68.183.189.171:9999/unsentEmail"
-		check_api = "http://127.0.0.1:5049/setSentEmail"
+		check_api = "http://68.183.189.171:9999/setSentEmail"
+		# check_api = "http://127.0.0.1:5049/setSentEmail"
 		jsondata = {"name":email_id}
 		data = requests.get(check_api,json=jsondata,headers=headers)
 		if data.status_code != 200:
