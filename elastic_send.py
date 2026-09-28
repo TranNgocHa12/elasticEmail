@@ -147,7 +147,7 @@ def send_email():
 		to_email = "support@fitech.com.vn",
 	    subject=email_templ[0]["subject"],
 	    html_body=email_templ[0]["body_html"],
-	    from_email="hatn@fitech.com.vn"
+	    from_email="support@fitech.com.vn"
 	)
 	logging.info("Send email successfully!")
 		# email_str +=  "\"" + item["email"] + "\"" + ","
