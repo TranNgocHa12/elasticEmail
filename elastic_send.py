@@ -18,6 +18,8 @@ logging.basicConfig(
 
 ELASTIC_API_KEY = os.getenv("ELASTIC_API_KEY")
 email_batch_size = os.getenv("email_batch_size")
+hour_send_email = os.getenv("hour_send_email")
+minute_send_email = os.getenv("minute_send_email")
 
 def get_unsent_email(email_batch_size):
 		headers = {'Content-Type': "application/json", 'Accept': "application/json"}
@@ -136,7 +138,9 @@ if __name__ == "__main__":
 	scheduler = BlockingScheduler()
 
 	# Option A: Run at 3 specific times of day (e.g., 8:00 AM, 1:00 PM, 6:00 PM)
-	scheduler.add_job(send_email, 'cron', hour='9,10,11', minute=41)
+	scheduler.add_job(send_email, 'cron', hour='2,10,18', minute=0)
+	scheduler.add_job(send_email, 'cron', hour=hour_send_email, minute=minute_send_email)
+	
 
 	# Option B: Run every 8 hours interval
 	# scheduler.add_job(send_email, 'interval', hours=8)
