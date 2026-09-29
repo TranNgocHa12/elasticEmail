@@ -135,24 +135,24 @@ def send_email():
 	send_status = -1
 	for item in email_list:
 			# if(email_str != ""):
+		email_str = "\"" + item["email"] + "\"" + "," + "\"" + "support@fitech.com.vn" + "\""
 		send_status = send_transactional_email(
-		to_email = item["email"],
+		to_email = email_str,
 	    subject=email_templ[0]["subject"],
 	    html_body=email_templ[0]["body_html"],
-	    from_email="hatn@fitech.com.vn"
+	    from_email="huongnd@fitech.com.vn"
 	)
 		if(send_status != -1):
 			update_sent_email(item["id"])
-	send_status = send_transactional_email(
-		to_email = "support@fitech.com.vn",
-	    subject=email_templ[0]["subject"],
-	    html_body=email_templ[0]["body_html"],
-	    from_email="support@fitech.com.vn"
-	)
+	# send_status = send_transactional_email(
+	# 	to_email = "support@fitech.com.vn",
+	#     subject=email_templ[0]["subject"],
+	#     html_body=email_templ[0]["body_html"],
+	#     from_email="support@fitech.com.vn"
+	# )
 	logging.info("Send email successfully!")
 		# email_str +=  "\"" + item["email"] + "\"" + ","
 	# email_str += "\"" + "support@fitech.com.vn" + "\""
-	# emails = email_str[:-1]
 	
 	# if(email_str != ""):
 	# 	send_status = send_transactional_email(
