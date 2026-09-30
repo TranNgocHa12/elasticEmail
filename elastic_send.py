@@ -133,6 +133,7 @@ def send_email():
 	email_list = get_unsent_email(email_batch_size)
 	email_str = ""
 	send_status = -1
+	update_db_status = 0
 	for item in email_list:
 			# if(email_str != ""):
 		email_str = "\"" + item["email"] + "\"" + "," + "\"" + "support@fitech.com.vn" + "\""
@@ -143,14 +144,19 @@ def send_email():
 	    from_email="huongnd@fitech.com.vn"
 	)
 		if(send_status != -1):
-			update_sent_email(item["id"])
+			update_db_status = update_sent_email(item["id"])
+			if(update_db_status == -1):
+				logging.info("Update status for email and lead unsuccessfully! email_id: ",item["id"] )
+		else:
+			logging.info("Send email unsuccessfully! ",item["email"] )
 	# send_status = send_transactional_email(
 	# 	to_email = "support@fitech.com.vn",
 	#     subject=email_templ[0]["subject"],
 	#     html_body=email_templ[0]["body_html"],
 	#     from_email="support@fitech.com.vn"
 	# )
-	logging.info("Send email successfully!")
+	
+	logging.info("Send email finished!")
 		# email_str +=  "\"" + item["email"] + "\"" + ","
 	# email_str += "\"" + "support@fitech.com.vn" + "\""
 	
